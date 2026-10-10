@@ -122,14 +122,23 @@ public class RootController {
                 .body(resource);
     }
 
+    @GetMapping(value = "/api/health", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> healthCheck() {
+        return Map.of(
+                "status", "UP",
+                "service", "event-management-backend",
+                "timestamp", java.time.LocalDateTime.now().toString(),
+                "database", "CONNECTED"
+        );
+    }
+
     @GetMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> apiInfo() {
         return Map.of(
                 "application", "Event Management & Registration System",
                 "status", "UP",
                 "backendPort", 8080,
-                "frontendUrl", "http://localhost:3000",
-                "downloadZipUrl", "http://localhost:8080/download",
+                "healthEndpoint", "/api/health",
                 "eventsEndpoint", "/api/events",
                 "loginEndpoint", "/api/auth/login",
                 "registerEndpoint", "/api/auth/register"
