@@ -122,7 +122,7 @@ public class RootController {
                 .body(resource);
     }
 
-    @GetMapping(value = "/api/health", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = {"/api/health", "/health"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> healthCheck() {
         return Map.of(
                 "status", "UP",

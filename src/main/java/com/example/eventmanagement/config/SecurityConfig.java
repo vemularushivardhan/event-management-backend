@@ -69,25 +69,26 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // Public Root & Health Info Endpoints
-                        .requestMatchers("/", "/api", "/api/health", "/download").permitAll()
+                        .requestMatchers("/", "/api", "/api/", "/api/health", "/api/health/", "/health", "/health/", "/download").permitAll()
 
-                        // Public Auth Endpoints
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/me").authenticated()
+                        // Public Auth Endpoints (Support with and without /api prefix, with or without trailing slash)
+                        .requestMatchers("/api/auth/register", "/api/auth/register/**", "/api/auth/login", "/api/auth/login/**",
+                                         "/auth/register", "/auth/register/**", "/auth/login", "/auth/login/**").permitAll()
+                        .requestMatchers("/api/auth/me", "/api/auth/me/**", "/auth/me", "/auth/me/**").authenticated()
 
                         // Public Event Browsing Endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/events/**", "/events/**").permitAll()
 
                         // Admin Event Management Endpoints
-                        .requestMatchers(HttpMethod.POST, "/api/events/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/events/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/events/**", "/events/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/events/**", "/events/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/events/**", "/events/**").hasRole("ADMIN")
 
                         // Admin Management Endpoints
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**", "/admin/**").hasRole("ADMIN")
 
                         // Authenticated Registration Endpoints
-                        .requestMatchers("/api/registrations/**").authenticated()
+                        .requestMatchers("/api/registrations/**", "/registrations/**").authenticated()
 
                         // Any other request must be authenticated
                         .anyRequest().authenticated()
